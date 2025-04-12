@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Xr.Category.Application;
 using Xr.User.Application;
 
-namespace Xr.System.WebApi.Controllers
+namespace Xr.User.WebApi.Controllers
 {
     /// <summary>
     /// 用户
@@ -15,17 +15,17 @@ namespace Xr.System.WebApi.Controllers
     [Tags("用户")]
     [ApiController]
     [Route("user")]
-    public class UserController (IMediator mediator) : WebApiController
+    public class UserController(IMediator mediator) : WebApiController
     {
         private readonly IMediator _mediator = mediator;
 
         /// <summary>
-        /// 新增类目
+        /// 新增用户
         /// </summary>
         /// <param name="cmd"></param>
         /// <returns></returns>
         [Authorize]
-        [HttpPost("action.category.add")]
+        [HttpPost("user.add")]
         public async Task<IActionResult> ActionCategoryAdd([FromBody] UserAddCmd cmd)
         {
             var result = await _mediator.Send(cmd);
@@ -33,12 +33,12 @@ namespace Xr.System.WebApi.Controllers
         }
 
         /// <summary>
-        /// 修改类目
+        /// 修改用户
         /// </summary>
         /// <param name="cmd"></param>
         /// <returns></returns>
         [Authorize]
-        [HttpPut("action.category.modify")]
+        [HttpPut("user.modify")]
         public async Task<IActionResult> ActionCategoryModify([FromBody] UserModifyCmd cmd)
         {
             var result = await _mediator.Send(cmd);
@@ -46,7 +46,7 @@ namespace Xr.System.WebApi.Controllers
         }
 
         /// <summary>
-        /// 查看类目详情
+        /// 查看用户详情
         /// </summary>
         /// <param name="query"></param>
         /// <returns></returns>
@@ -54,7 +54,7 @@ namespace Xr.System.WebApi.Controllers
         [HttpGet("user.detail.query")]
         public async Task<IActionResult> ActionCategoryDetailQuery([FromQuery] UserDetailQuery query)
         {
-            var data  = await _mediator.Send(query);
+            var data = await _mediator.Send(query);
             return Success(data);
         }
     }

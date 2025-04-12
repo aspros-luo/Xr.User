@@ -45,12 +45,12 @@ builder.Services.AddSwaggerGen(c =>
     c.SwaggerDoc("v1", new OpenApiInfo
     {
         Version = "v1",
-        Title = "类目",
-        Description = "类目Api说明",
+        Title = "用户",
+        Description = "用户Api说明",
     });
 
-    c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "Xr.Category.Application.xml"),true);
-    c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "Xr.Category.WebApi.xml"),true);
+    c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "Xr.User.Application.xml"),true);
+    c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "Xr.User.WebApi.xml"),true);
 
     #endregion
 
