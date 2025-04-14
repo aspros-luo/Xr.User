@@ -1,0 +1,4 @@
+﻿cd Xr.User.Infrastructure
+dotnet ef migrations add InitialCreate --startup-project ../Xr.User.WebApi
+ef migrations remove 
+dotnet ef database update --startup-project ../Xr.User.WebApi
