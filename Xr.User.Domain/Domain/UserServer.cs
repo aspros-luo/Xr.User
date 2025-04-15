@@ -2,7 +2,7 @@
 
 namespace Xr.User.Domain
 {
-    public class UserServer : BasicEntity, IAggregateRoot
+    public class UserServer : BasicEntity
     {
         public long Id { get; protected set; }
         /// <summary>

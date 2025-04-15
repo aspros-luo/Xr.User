@@ -2,7 +2,7 @@
 
 namespace Xr.User.Domain
 {
-    public class UserFollow : BasicEntity, IAggregateRoot
+    public class UserFollow : BasicEntity
     {
         public long Id { get; protected set; }
         /// <summary>

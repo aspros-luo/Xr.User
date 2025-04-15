@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Xr.User.Domain.Domain;
 
 namespace Xr.User.Domain
 {
@@ -55,12 +56,15 @@ namespace Xr.User.Domain
         /// </summary>
         public long Phone { get; protected set; }
 
-        public virtual ICollection<UserFollow>? UserFollows { get; protected set; }
-        public virtual UserServer? UserServer { get; protected set; }
+        public virtual ICollection<UserFollow> UserFollows { get; protected set; }
+        public virtual UserServer UserServer { get; protected set; }
+        public virtual ICollection<UserOauth> UserOauths { get; protected set; }
 
         public User()
         {
-
+            UserFollows = [];
+            UserServer = new UserServer();
+            UserOauths = [];
         }
 
     }
