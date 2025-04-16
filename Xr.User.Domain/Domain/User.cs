@@ -1,4 +1,5 @@
 ﻿using Aspros.Base.Framework.Domain;
+using Aspros.Base.Framework.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,6 +20,10 @@ namespace Xr.User.Domain
         /// 密码
         /// </summary>
         public string Password { get; protected set; } = string.Empty;
+        /// <summary>
+        /// 密码盐
+        /// </summary>
+        public string PasswordSalt { get; protected set; } = DateTime.Now.Ticks.ToString();
         /// <summary>
         /// 用户类型
         /// </summary>
@@ -56,16 +61,78 @@ namespace Xr.User.Domain
         /// </summary>
         public long Phone { get; protected set; }
 
-        public virtual ICollection<UserFollow> UserFollows { get; protected set; }
-        public virtual UserServer UserServer { get; protected set; }
-        public virtual ICollection<UserOauth> UserOauths { get; protected set; }
+        public virtual ICollection<UserFollow> UserFollows { get; protected set; } = [];
+        public virtual UserServer UserServer { get; protected set; } = new UserServer();
+        public virtual ICollection<UserOauth> UserOauths { get; protected set; } = [];
 
         public User()
         {
-            UserFollows = [];
-            UserServer = new UserServer();
-            UserOauths = [];
+
         }
+
+        public User(string userName, string password, UserType type)
+        {
+            UserName = userName;
+            Password = Md5Password(password);
+            NickName = userName;
+            Type = type;
+            if (type == UserType.Photographer || type == UserType.Makeuper) UserServer = new UserServer();
+        }
+
+        /// <summary>
+        /// 登录
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public bool Login(string username, string password)
+        {
+            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(username)) throw new Exception("用户名或密码不能为空");
+            return username.Equals(UserName) && password.Equals(Md5Password(Password));
+        }
+
+        /// <summary>
+        /// 修改密码
+        /// </summary>
+        /// <param name="oldPassword"></param>
+        /// <param name="newPassword"></param>
+        /// <exception cref="ArgumentException"></exception>
+        public void UpdatePassword(string oldPassword, string newPassword)
+        {
+            var md5OldPassword = Md5Password(oldPassword);
+            if (!md5OldPassword.Equals(Password))
+            {
+                throw new ArgumentException("原密码不正确");
+            }
+
+            var md5Password = Md5Password(newPassword);
+            //            if (this.LoginPwd == md5Password)
+            //            {
+            //                throw new ArgumentException("新密码和旧密码不能一样");
+            //            }
+            Password = md5Password;
+        }
+
+        /// <summary>
+        /// 充值密码
+        /// </summary>
+        /// <param name="password"></param>
+        public void ResetPassword(string password)
+        {
+            var md5Password = Md5Password(password);
+            //            if (this.LoginPwd == md5Password)
+            //            {
+            //                throw new ArgumentException("新密码和旧密码不能一样");
+            //            }
+            Password = md5Password;
+        }
+
+        private string Md5Password(string password)
+        {
+            return SignUtil.Md5Sign(password + SignUtil.Md5Sign(PasswordSalt));
+        }
+
 
     }
 }

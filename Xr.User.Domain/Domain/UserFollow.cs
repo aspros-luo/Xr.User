@@ -23,5 +23,33 @@ namespace Xr.User.Domain
         public DateTime FollowTime { get; protected set; } = DateTime.Now;
         
         public virtual User? User { get; protected set; }
+
+        public UserFollow() { }
+
+        public UserFollow(long userId, FollowType type, long valueId)
+        {
+            UserId = userId;
+            Type = type;
+            ValueId = valueId;
+        }
+
+        /// <summary>
+        /// 取消关注
+        /// </summary>
+        public void UnFollow()
+        {
+            // 取消关注
+            Status = Status.Deleted;
+        }
+
+        /// <summary>
+        /// 关注
+        /// </summary>
+        public void Follow()
+        {
+            // 关注
+            Status = Status.Normal;
+            FollowTime = DateTime.Now;
+        }
     }
 }
