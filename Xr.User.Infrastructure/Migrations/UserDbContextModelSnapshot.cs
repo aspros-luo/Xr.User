@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Xr.User.Infrastructure;
 
@@ -16,8 +17,53 @@ namespace Xr.User.Infrastructure.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.4")
+                .HasAnnotation("ProductVersion", "8.0.12")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
+
+            MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
+
+            modelBuilder.Entity("Xr.User.Domain.Domain.UserOauth", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("Creator")
+                        .HasColumnType("bigint");
+
+                    b.Property<DateTime>("GmtCreated")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<DateTime>("GmtModified")
+                        .HasColumnType("datetime(6)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("tinyint(1)");
+
+                    b.Property<long>("Modifier")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("Plateform")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<long>("UserId")
+                        .HasColumnType("bigint(20)");
+
+                    b.Property<string>("ValueId")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserOauth");
+                });
 
             modelBuilder.Entity("Xr.User.Domain.User", b =>
                 {
@@ -26,6 +72,8 @@ namespace Xr.User.Infrastructure.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("bigint(20)")
                         .HasColumnName("id");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<string>("Avatar")
                         .IsRequired()
@@ -77,9 +125,13 @@ namespace Xr.User.Infrastructure.Migrations
 
                     b.Property<string>("Password")
                         .IsRequired()
-                        .HasMaxLength(100)
                         .HasColumnType("varchar(100)")
                         .HasColumnName("password");
+
+                    b.Property<string>("PasswordSalt")
+                        .IsRequired()
+                        .HasColumnType("varchar(100)")
+                        .HasColumnName("password_salt");
 
                     b.Property<string>("Phone")
                         .IsRequired()
@@ -122,6 +174,8 @@ namespace Xr.User.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("BIGINT(20)")
                         .HasColumnName("id");
+
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<long>("Creator")
                         .HasColumnType("BIGINT(20)")
@@ -178,6 +232,8 @@ namespace Xr.User.Infrastructure.Migrations
                         .HasColumnType("bigint(20)")
                         .HasColumnName("id");
 
+                    MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<long>("Id"));
+
                     b.Property<long>("Creator")
                         .HasMaxLength(20)
                         .HasColumnType("bigint(20)")
@@ -191,9 +247,9 @@ namespace Xr.User.Infrastructure.Migrations
                         .HasColumnType("datetime")
                         .HasColumnName("gmt_modified");
 
-                    b.Property<sbyte>("HasAudit")
+                    b.Property<sbyte>("IsAudit")
                         .HasColumnType("tinyint(4)")
-                        .HasColumnName("has_audit");
+                        .HasColumnName("is_audit");
 
                     b.Property<sbyte>("IsDeleted")
                         .HasColumnType("tinyint(4)")
@@ -223,6 +279,17 @@ namespace Xr.User.Infrastructure.Migrations
                     b.ToTable("user_server", (string)null);
                 });
 
+            modelBuilder.Entity("Xr.User.Domain.Domain.UserOauth", b =>
+                {
+                    b.HasOne("Xr.User.Domain.User", "User")
+                        .WithMany("UserOauths")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Xr.User.Domain.UserFollow", b =>
                 {
                     b.HasOne("Xr.User.Domain.User", "User")
@@ -249,7 +316,10 @@ namespace Xr.User.Infrastructure.Migrations
                 {
                     b.Navigation("UserFollows");
 
-                    b.Navigation("UserServer");
+                    b.Navigation("UserOauths");
+
+                    b.Navigation("UserServer")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

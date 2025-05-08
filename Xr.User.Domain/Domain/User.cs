@@ -59,7 +59,7 @@ namespace Xr.User.Domain
         /// <summary>
         /// 手机号码
         /// </summary>
-        public long Phone { get; protected set; }
+        public string Phone { get; protected set; } = string.Empty;
 
         public virtual ICollection<UserFollow> UserFollows { get; protected set; } = [];
         public virtual UserServer UserServer { get; protected set; } = new UserServer();
@@ -72,11 +72,76 @@ namespace Xr.User.Domain
 
         public User(string userName, string password, UserType type)
         {
+            if (string.IsNullOrEmpty(userName) || string.IsNullOrEmpty(password)) throw new ArgumentException("用户名或密码不能为空");
             UserName = userName;
             Password = Md5Password(password);
             NickName = userName;
             Type = type;
             if (type == UserType.Photographer || type == UserType.Makeuper) UserServer = new UserServer();
+        }
+
+        public User(string phone, UserType userType)
+        {
+            if (string.IsNullOrEmpty(phone)) throw new ArgumentException("手机号不能为空");
+            Phone = phone;
+            UserName = phone;
+            NickName = phone;
+            Type = userType;
+            if (userType == UserType.Photographer || userType == UserType.Makeuper) UserServer = new UserServer();
+        }
+
+        public bool CheckPhoneExist()
+        {
+            return !string.IsNullOrEmpty(Phone);
+        }
+
+        /// <summary>
+        /// 修改用户基础信息
+        /// </summary>
+        /// <param name="nickName"></param>
+        /// <param name="sex"></param>
+        /// <param name="birthday"></param>
+        /// <param name="avatar"></param>
+        /// <param name="phone"></param>
+        public void ModifyInfo(string nickName, SexType? sex, DateTime? birthday, string avatar)
+        {
+            if (!string.IsNullOrEmpty(nickName)) NickName = nickName;
+            if (sex.HasValue) Sex = sex.Value;
+            if (birthday.HasValue) Birthday = birthday.Value;
+            if (!string.IsNullOrEmpty(avatar)) Avatar = avatar;
+        }
+
+        /// <summary>
+        /// 用户实名认证
+        /// </summary>
+        /// <param name="realName"></param>
+        /// <param name="idNo"></param>
+        /// <exception cref="ArgumentException"></exception>
+        public void VerifyUserReal(string realName, string idNo)
+        {
+            if (string.IsNullOrEmpty(realName) || string.IsNullOrEmpty(idNo)) throw new ArgumentException("真实姓名或身份证号不能为空");
+            RealName = realName;
+            IdNo = idNo;
+            IsReal = true;
+        }
+
+        /// <summary>
+        /// 关注
+        /// </summary>
+        /// <param name="valueId"></param>
+        /// <param name="type"></param>
+        public void Follow(long valueId, FollowType type)
+        {
+            if (UserFollows != null)
+            {
+                var userFollow = UserFollows.FirstOrDefault(x => x.ValueId == valueId && x.Type == type);
+                if (userFollow == null)
+                {
+                    userFollow = new UserFollow(Id, type, valueId);
+                    UserFollows.Add(userFollow);
+                }
+                userFollow.Follow();
+            }
         }
 
         /// <summary>

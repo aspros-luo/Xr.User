@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Xr.User.Domain;
 
 
 namespace Xr.User.Infrastructure
@@ -13,7 +12,8 @@ namespace Xr.User.Infrastructure
             entityTypeBuilder.HasKey(i => i.Id);
             entityTypeBuilder.Property(i => i.Id).IsRequired().HasMaxLength(20).HasColumnType("bigint(20)").ValueGeneratedOnAdd().HasColumnName("id");
             entityTypeBuilder.Property(i => i.UserName).IsRequired().HasMaxLength(20).HasColumnType("varchar(20)").HasColumnName("user_name");
-            entityTypeBuilder.Property(i => i.Password).HasMaxLength(100).HasColumnType("varchar(100)").HasColumnName("password");
+            entityTypeBuilder.Property(i => i.Password).HasColumnType("varchar(100)").HasColumnName("password");
+            entityTypeBuilder.Property(i => i.PasswordSalt).HasColumnType("varchar(100)").HasColumnName("password_salt");
             entityTypeBuilder.Property(i => i.Type).IsRequired().HasColumnType("tinyint(4)").HasColumnName("type");
             entityTypeBuilder.Property(i => i.NickName).HasMaxLength(50).HasColumnType("varchar(50)").HasColumnName("nick_name");
             entityTypeBuilder.Property(i => i.RealName).HasMaxLength(50).HasColumnType("varchar(50)").HasColumnName("real_name");

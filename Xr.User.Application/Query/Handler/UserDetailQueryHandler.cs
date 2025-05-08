@@ -11,10 +11,10 @@ namespace Xr.User.Application
 
         public async Task<UserDetailViewModel> Handle(UserDetailQuery request, CancellationToken cancellationToken)
         {
-            var entity = await _userReporistory.QueryDetail(request.Id).FirstOrDefaultAsync();
+            var entity = await _userReporistory.QueryDetail(request.Id).FirstOrDefaultAsync(cancellationToken: cancellationToken);
             if (entity == null)  return new UserDetailViewModel();
 
-            TypeAdapterConfig<User.Domain.User, UserDetailViewModel>.NewConfig().Map(d => d.Name, s => s.UserName + "maper");
+            TypeAdapterConfig<Domain.User, UserDetailViewModel>.NewConfig().Map(d => d.Name, s => "天衡-" + s.UserName);
 
             return entity.Adapt<UserDetailViewModel>();
         }

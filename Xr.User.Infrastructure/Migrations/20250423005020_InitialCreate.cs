@@ -23,7 +23,9 @@ namespace Xr.User.Infrastructure.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     user_name = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    password = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: false)
+                    password = table.Column<string>(type: "varchar(100)", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    password_salt = table.Column<string>(type: "varchar(100)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     type = table.Column<sbyte>(type: "tinyint(4)", nullable: false),
                     nick_name = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
@@ -49,6 +51,35 @@ namespace Xr.User.Infrastructure.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_user", x => x.id);
+                })
+                .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateTable(
+                name: "UserOauth",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
+                    UserId = table.Column<long>(type: "bigint(20)", nullable: false),
+                    Plateform = table.Column<int>(type: "int", nullable: false),
+                    ValueId = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Creator = table.Column<long>(type: "bigint", nullable: false),
+                    GmtCreated = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    Modifier = table.Column<long>(type: "bigint", nullable: false),
+                    GmtModified = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "tinyint(1)", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserOauth", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserOauth_user_UserId",
+                        column: x => x.UserId,
+                        principalTable: "user",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -88,7 +119,7 @@ namespace Xr.User.Infrastructure.Migrations
                     id = table.Column<long>(type: "bigint(20)", maxLength: 20, nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     UserId = table.Column<long>(type: "bigint(20)", nullable: false),
-                    has_audit = table.Column<sbyte>(type: "tinyint(4)", nullable: false),
+                    is_audit = table.Column<sbyte>(type: "tinyint(4)", nullable: false),
                     rate_point = table.Column<float>(type: "float(11,2)", nullable: false),
                     creator = table.Column<long>(type: "bigint(20)", maxLength: 20, nullable: false),
                     gmt_created = table.Column<DateTime>(type: "datetime", nullable: false),
@@ -110,6 +141,11 @@ namespace Xr.User.Infrastructure.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateIndex(
+                name: "IX_UserOauth_UserId",
+                table: "UserOauth",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_user_follow_user_id",
                 table: "user_follow",
                 column: "user_id");
@@ -124,6 +160,9 @@ namespace Xr.User.Infrastructure.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "UserOauth");
+
             migrationBuilder.DropTable(
                 name: "user_follow");
 

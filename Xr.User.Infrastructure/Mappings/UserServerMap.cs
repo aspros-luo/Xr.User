@@ -12,7 +12,7 @@ namespace Xr.User.Infrastructure
             entityTypeBuilder.ToTable("user_server");
             entityTypeBuilder.HasKey(i => i.Id);
             entityTypeBuilder.Property(i => i.Id).IsRequired().ValueGeneratedOnAdd().HasMaxLength(20).HasColumnType("bigint(20)").HasColumnName("id");
-            entityTypeBuilder.Property(i => i.HasAudit).HasColumnType("tinyint(4)").HasColumnName("has_audit");
+            entityTypeBuilder.Property(i => i.IsAudit).HasColumnType("tinyint(4)").HasColumnName("is_audit");
             entityTypeBuilder.Property(i => i.RatePoint).HasColumnType("float(11,2)").HasColumnName("rate_point");
 
             entityTypeBuilder.Property(i => i.Status).HasColumnType("tinyint(4)").HasColumnName("status");
