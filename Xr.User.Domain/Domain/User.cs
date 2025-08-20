@@ -1,10 +1,4 @@
 ﻿using Aspros.Base.Framework.Domain;
-using Aspros.Base.Framework.Infrastructure;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xr.User.Domain.Domain;
 
 namespace Xr.User.Domain
@@ -43,7 +37,7 @@ namespace Xr.User.Domain
         /// <summary>
         /// 是否实名认证
         /// </summary>
-        public bool IsReal { get; protected set; } = false;
+        public bool IsReal { get; protected set; }
         /// <summary>
         /// 性别
         /// </summary>
@@ -102,7 +96,6 @@ namespace Xr.User.Domain
         /// <param name="sex"></param>
         /// <param name="birthday"></param>
         /// <param name="avatar"></param>
-        /// <param name="phone"></param>
         public void ModifyInfo(string nickName, SexType? sex, DateTime? birthday, string avatar)
         {
             if (!string.IsNullOrEmpty(nickName)) NickName = nickName;

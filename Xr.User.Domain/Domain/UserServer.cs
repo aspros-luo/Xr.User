@@ -16,7 +16,7 @@ namespace Xr.User.Domain
         /// <summary>
         /// 评分
         /// </summary>
-        public float RatePoint { get; protected set; } = 0;
+        public float RatePoint { get; protected set; }
 
         public virtual User? User { get; protected set; }
 

@@ -3,6 +3,22 @@ using Xr.User.Domain;
 
 namespace Xr.Category.Application
 {
+
+    /// <summary>
+    /// 添加用户
+    /// </summary>
+    public class UserAddCmd : IRequest<long>
+    {
+        /// <summary>
+        /// 用户名称
+        /// </summary>
+        public required string Username { get; set; }
+        /// <summary>
+        /// 密码
+        /// </summary>
+        public required string Password { get; set; }
+    }
+    
     /// <summary>
     /// 用户名密码注册用户
     /// </summary>

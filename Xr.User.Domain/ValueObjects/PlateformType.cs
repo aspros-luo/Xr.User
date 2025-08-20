@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Xr.User.Domain.ValueObjects
+﻿namespace Xr.User.Domain.ValueObjects
 {
-    public enum PlateformType
+    public enum PlatformType
     {
         Wechat = 1,
-        RedNote=2,
-        Douyin=3
+        RedNote = 2,
+        Douyin = 3
     }
 }

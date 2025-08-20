@@ -7,7 +7,7 @@ namespace Xr.User.Domain.Domain
     {
         public long Id { get; set; }
         public long UserId { get; private set; }
-        public PlateformType Plateform { get; private set; } = 0;
+        public PlatformType Plateform { get; private set; } = 0;
         public string ValueId { get; private set; } = string.Empty;
 
         public virtual User User { get; private set; }
@@ -17,7 +17,7 @@ namespace Xr.User.Domain.Domain
 
         }
 
-        public UserOauth(long userId, PlateformType plateform, string valueId)
+        public UserOauth(long userId, PlatformType plateform, string valueId)
         {
             UserId = userId;
             Plateform = plateform;
