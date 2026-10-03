@@ -7,7 +7,7 @@ namespace Xr.User.Infrastructure.Repostory
     public class UserRepository : BaseRepository<User.Domain.User>, IUserRepository
     {
         private readonly IQueryable<User.Domain.User> _users;
-        public UserRepository(IDbContext dbContext) : base(dbContext)
+        public UserRepository(IDbContext dbContext) : base(dbContext.Set<User.Domain.User>())
         {
             _users = Entities;
         }
