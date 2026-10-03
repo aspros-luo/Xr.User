@@ -28,25 +28,25 @@ builder.Services
         options.SerializerSettings.DateFormatString = "yyyy-MM-dd HH:mm:ss";
     });
 
-//ÊÖ¶¯ÉèÖÃurl ºóĞøÓÉapisix×ª·¢
+//æ‰‹åŠ¨è®¾ç½®url åç»­ç”±apisixè½¬å‘
 //builder.WebHost.UseUrls($"http://*:{port}");
-//¶ÁÈ¡nacosÅäÖÃÎÄ¼ş
+//è¯»å–nacosé…ç½®æ–‡ä»¶
 builder.Host.UseNacosConfig("Nacos");
 
-//×¢²á·şÎñµ½nacos
+//æ³¨å†ŒæœåŠ¡åˆ°nacos
 builder.Services.AddNacosAspNet(builder.Configuration, "Nacos");
 
 //builder.Services.AddAutoMapper()
 
 builder.Services.AddSwaggerGen(c =>
 {
-    #region ÅäÖÃAPIÎÄµµËµÃ÷
+    #region é…ç½®APIæ–‡æ¡£è¯´æ˜
 
     c.SwaggerDoc("v1", new OpenApiInfo
     {
         Version = "v1",
-        Title = "ÓÃ»§",
-        Description = "ÓÃ»§ApiËµÃ÷",
+        Title = "ç”¨æˆ·",
+        Description = "ç”¨æˆ·Apiè¯´æ˜",
     });
 
     c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "Xr.User.Application.xml"),true);
@@ -56,7 +56,7 @@ builder.Services.AddSwaggerGen(c =>
 
     c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
     {
-        Description = "ÔÚÏÂ¿òÖĞÊäÈëÇëÇóÍ·ÖĞĞèÒªÌí¼ÓJwtÊÚÈ¨Token£ºBearer Token",
+        Description = "åœ¨ä¸‹æ¡†ä¸­è¾“å…¥è¯·æ±‚å¤´ä¸­éœ€è¦æ·»åŠ JwtæˆæƒTokenï¼šBearer Token",
         Name = "Authorization",
         In = ParameterLocation.Header,
         Type = SecuritySchemeType.ApiKey,
@@ -114,7 +114,7 @@ builder.Services.AddAuthorizationBuilder()
         policy.RequireClaim("scope", "user");
     });
 
-//ÉèÖÃdbÁ¬½Ó
+//è®¾ç½®dbè¿æ¥
 builder.Services.AddDbContext<UserDbContext>(op =>
         op.UseMySql(builder.Configuration.GetSection("data")["ConnectionString"], new MySqlServerVersion(new Version(8, 2, 0))));
 
@@ -126,7 +126,7 @@ builder.Services.AddCap(x =>
     x.UseRabbitMQ(builder.Configuration.GetSection("data")["RabbitMqServer"]);
 });
 
-//ÉèÖÃredisÁ¬½Ó
+//è®¾ç½®redisè¿æ¥
 builder.Services.AddStackExchangeRedisCache(options =>
 {
     options.InstanceName = "";
@@ -135,27 +135,26 @@ builder.Services.AddStackExchangeRedisCache(options =>
 
 
 
-//¹¤×÷µ¥Ôª×é
+//å·¥ä½œå•å…ƒç»„
 //builder.Services.AddTransient<IUnitOfWork, UnitOfWork>();
-//»ñÈ¡tokenÖĞµ±Ç°²Ù×÷ÈË,×â»§µÈĞÅÏ¢
+//è·å–tokenä¸­å½“å‰æ“ä½œäºº,ç§Ÿæˆ·ç­‰ä¿¡æ¯
 //builder.Services.AddTransient<IWorkContext, WorkContext>();
 //dbContext
 //builder.Services.AddTransient<IDbContext, SystemDbContext>();
 
-//http context ÉÏÏÂÎÄ
+//http context ä¸Šä¸‹æ–‡
 builder.Services.AddHttpContextAccessor();
 
-//×Ô¶¯×¢Èë
-builder.Services.AutoInject();
+//è‡ªåŠ¨æ³¨å…¥
+builder.Services.AutoInject(
+    typeof(Xr.Category.Application.UserAddCmd).Assembly,
+    typeof(Xr.User.Infrastructure.Repostory.UserRepository).Assembly);
 
-//²Ö´¢
+//ä»“å‚¨
 //builder.Services.AddTransient<ITenantPackageRepository, TenantPackageRepository>();
 //builder.Services.AddTransient<IUserReporistory, UserReporistory>();
 //builder.Services.AddTransient<IRoleReporistory, RoleReporistory>();
 //builder.Services.AddTransient<IMenuReporistory, MenuReporistory>();
-
-//ÊÂ¼ş×ÜÏß
-builder.Services.AddTransient<IEventBus, EventBus>();
 
 
 //cqrs cmd query
@@ -185,11 +184,8 @@ if (app.Environment.IsDevelopment())
 
 app.MapScalarApiReference();
 
-//ÖØĞ´²ÎÊı
+//é‡å†™å‚æ•°
 //app.UseRewriteQueryString();
-
-//»ñÈ¡·şÎñ
-ServiceLocator.Instance = app.Services;
 
 app.UseHttpsRedirection();
 
@@ -204,7 +200,7 @@ app.UseAuthentication();
 
 app.UseAuthorization();
 
-//È¨ÏŞĞ£Ñé
+//æƒé™æ ¡éªŒ
 //app.UsePermissionValid();
 
 app.MapControllers().RequireAuthorization("ApiScope");
