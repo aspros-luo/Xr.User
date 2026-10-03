@@ -1,4 +1,4 @@
-﻿using Aspros.Base.Framework.Infrastructure;
+﻿using Aspros.Base.Framework.Application.Abstractions.Persistence;
 using MediatR;
 using Xr.User.Domain;
 
