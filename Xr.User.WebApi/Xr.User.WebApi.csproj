@@ -11,7 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Aspros.Base.Framework.Infrastructure" Version="1.2.0" />
+    <PackageReference Include="Aspros.Base.Framework.Infrastructure" Version="1.2.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.12" />
     <PackageReference Include="DotNetCore.CAP" Version="8.3.2" />
     <PackageReference Include="DotNetCore.CAP.MySql" Version="8.3.2" />
